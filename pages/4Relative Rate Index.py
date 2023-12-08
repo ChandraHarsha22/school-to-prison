@@ -21,6 +21,13 @@ df['year'] = df['year'].apply(lambda y: str(y-1) + '-' + str(y)[2:])
 # Create a list of years
 years = df['year'].unique()
 
+st.write("""
+### Exploring the Relative Rate Index (RRI)
+
+The Relative Rate Index (RRI) emerges as a pivotal analytical tool in the realm of social sciences and public policy, offering a nuanced lens to examine and compare the prevalence of specific events or outcomes across diverse demographic groups. Employed extensively to scrutinize disparities in critical areas such as criminal justice and education, the RRI provides a robust framework for researchers and policymakers. It aids in identifying and quantifying the variances in phenomena like crime rates or educational achievements, thereby illuminating the intricate interplay of socio-economic factors within various communities. This measure is instrumental in shaping informed, equitable, and impactful policies and practices.
+""")
+
+
 # Sidebar widget to select years - applies to all categories
 years_selected = st.sidebar.multiselect('Select years', years, default=years, key='year_select')
 df_filtered_years = df[df['year'].isin(years_selected)]
@@ -30,13 +37,6 @@ ordered_races = [
     'White', 'African American/Black', 'Hispanic or Latino', 
     'Asian', 'Multi-race, non-Hispanic or Latino', 
     'American Indian or Alaskan Native', 'Native Hawaiian or Pacific Islander'
-]
-
-# Corresponding colors for each race
-custom_colors = [
-    'yellow', 'lightblue', 'green', 
-    'orange', 'purple', 
-    'brown', 'darkblue'
 ]
 
 # Relative Rate Index (RRI) Calculation
@@ -67,7 +67,7 @@ if not np.isnan(reference_group_rate) and reference_group_rate != 0:
             rri_chart = alt.Chart(df_filtered).mark_bar().encode(
             x=alt.X('Race/Ethnicity', sort=ordered_races),  # Sort the x-axis based on the ordered races
             y='average(RRI)',
-            color=alt.Color('Race/Ethnicity', scale=alt.Scale(domain=ordered_races, range=custom_colors))  # Custom color mapping
+            color=alt.Color('Race/Ethnicity', scale=alt.Scale(domain=ordered_races, range=mapped_colors))  # Custom color mapping
             ).properties(
             title=f'Relative Rate Index (RRI) of Disciplinary Actions by Race/Ethnicity for {cat}'
             )

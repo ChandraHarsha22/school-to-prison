@@ -24,6 +24,14 @@ year = st.sidebar.selectbox('Select a year', years)
 # Filter the dataframe
 df = df[df['year'] == year]
 
+st.write("""
+### Intersectional Analysis: Unraveling the Layers of Educational Disparity
+
+In this pivotal section, we delve into an intersectional analysis, focusing on students who encounter not just one, but multiple disadvantages — be it due to disabilities, language barriers as English learners, or economic challenges as low-income students. Our approach employs the innovative UpSet plot, a powerful visualization tool that transcends traditional methods. The UpSet plot adeptly maps the intricate intersections of these varied disadvantages, offering a clear, comprehensive view of disciplinary rates across these overlapping categories.
+
+This tool is particularly effective in revealing complex, often hidden, patterns of disparity, enabling us to see not only how individual disadvantages impact disciplinary rates but also how the combination of these factors amplifies the challenges faced by students. Designed for clarity, the UpSet plot will guide even those unfamiliar with complex data analysis through the nuances of our findings, illuminating the multifaceted nature of educational equity and the critical need for tailored interventions.
+""")
+
 # Calculation of total disciplined and total eligible counts by race
 df_dis_total = df[df['Students w/ Disabilities'].isnull() & df['English Learners'].isnull() & df['Low Income'].isnull()]
 disciplined_total = df_dis_total.groupby('Race/Ethnicity')['Total Disciplined'].sum().reset_index(name='Total Disciplined')
@@ -148,16 +156,33 @@ df_upset = df_upset.set_index(['Students w/ Disabilities', 'English Learners', '
 from upsetplot import UpSet
 import matplotlib.pyplot as plt
 # create subplot without axis ticks
-fig, ax = plt.subplots()
-ax.get_xaxis().set_ticks([])
-ax.get_yaxis().set_ticks([])
-upset = UpSet(df_upset, subset_size='sum', sum_over = 'Total Eligible', intersection_plot_elements=2, orientation='vertical')
-upset.add_catplot(value='Disciplinary Rate', kind='bar', color='green')
-upset.plot(fig=fig)
-fig.set_figwidth(12)
-fig.set_figheight(12)
-st.pyplot(fig)
-st.write("First data")
-st.write("Second data")
+with plt.style.context('Solarize_Light2'):
+   fig, ax = plt.subplots()
+   ax.get_xaxis().set_ticks([])
+   ax.get_yaxis().set_ticks([])
+   upset = UpSet(df_upset, subset_size='sum', sum_over = 'Total Eligible', intersection_plot_elements=2, show_counts=True)
+   upset.add_catplot(value='Disciplinary Rate', kind='bar', color='firebrick')
+   upset.plot(fig=fig)
+   # Find the catplot axis
+   # This depends on the layout of your plot. Usually, it's the last axis.
+   catplot_ax = fig.axes[-1]  # This might change depending on your plot
+
+   # Iterate through bars in the catplot and add labels
+   for bar in catplot_ax.patches:
+       # Get the bar's height and position
+       height = bar.get_height()
+       x = bar.get_x()
+       y = bar.get_y()
+
+    # Label to display (format as needed)
+       label_text = f'{height:.2f}%'
+
+    # Position the text above the bar
+       catplot_ax.text(x + bar.get_width() / 2, y + height, label_text, ha='center', va='bottom')
+   
+   fig.set_figwidth(12)
+   fig.set_figheight(12)
+   st.pyplot(fig)
+st.write("Intersectional analysis table")
 st.write(final_df2)
 

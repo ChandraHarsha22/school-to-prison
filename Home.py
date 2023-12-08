@@ -16,9 +16,6 @@ if 'show_visuals' not in st.session_state:
 def on_click():
     st.session_state.show_visuals = not st.session_state.show_visuals
 
-# Main title and subtitle
-st.title("School to Prison Pipeline in Massachusetts")
-
 # Main layout container
 main_container = st.empty()
 
@@ -26,6 +23,7 @@ if not st.session_state.show_visuals:
 
     # Inside the main container, layout your main page content
     with main_container.container():
+        st.title("School to Prison Pipeline in Massachusetts")
         st.write("Exploring the Impact and Solutions")
         # Inject custom CSS with a script tag
         st.markdown("""
@@ -82,12 +80,8 @@ if not st.session_state.show_visuals:
 
 # Display content from Race.py when the button is clicked
 if st.session_state.show_visuals:
-    col1, col5 = st.columns(2)
-
-    with col1:
-        st.write("Overview of disproportionality in discipline")
-    with col5 :
-        st.button("Click here to go back", on_click=on_click)
+    st.button("Click here to go back", on_click=on_click)
+    st.header("Overview of disproportionality in discipline")
     main_container.empty()
     districts = df['District Name'].unique()
     district = st.sidebar.selectbox('Select a district', districts)
@@ -149,7 +143,7 @@ if st.session_state.show_visuals:
             )
             st.write(chart)
 
-            st.write("Race breakdown for " + cat_val + " students in " + district + " district")
+            st.header("Race breakdown for " + cat_val + " students in " + district + " district")
 
             race_disciplined_counts = df_filtered.groupby(['Race/Ethnicity', 'year']).apply(lambda grp: get_filtered_counts(grp, categories_to_check, 'Total Disciplined')).reset_index(name='disciplined_counts')
 
@@ -194,42 +188,42 @@ if st.session_state.show_visuals:
 
             st.write(chart2)
 
-            if cat_val != 'all':
-                st.write("Impact of discipline on " + cat_val + " students in " + district + " district")
-                for year in df_filtered['year'].unique():
-                    st.header(year)
-                    df_year_filtered = df_filtered[df_filtered['year'] == year]
-                    df_year_non_filtered = df_non_filtered[df_non_filtered['year'] == year]
-                    # get percentage of category students disciplined
-                    group_key = ['Race/Ethnicity']
-                    category_disciplined_percentage = df_year_filtered.groupby(group_key).apply(lambda grp: get_filtered_counts(grp, categories_to_check, 'Total Disciplined')) / df_year_non_filtered.groupby(group_key).apply(lambda grp: get_filtered_counts(grp, categories_to_check, 'Total Disciplined', mode='sum')) * 100
-                    category_disciplined_percentage = category_disciplined_percentage.reset_index(name='percentage_cat')
-                    category_disciplined_percentage['sample'] = 'Disciplined'
+            # if cat_val != 'all':
+            #     st.write("Impact of discipline on " + cat_val + " students in " + district + " district")
+            #     for year in df_filtered['year'].unique():
+            #         st.header(year)
+            #         df_year_filtered = df_filtered[df_filtered['year'] == year]
+            #         df_year_non_filtered = df_non_filtered[df_non_filtered['year'] == year]
+            #         # get percentage of category students disciplined
+            #         group_key = ['Race/Ethnicity']
+            #         category_disciplined_percentage = df_year_filtered.groupby(group_key).apply(lambda grp: get_filtered_counts(grp, categories_to_check, 'Total Disciplined')) / df_year_non_filtered.groupby(group_key).apply(lambda grp: get_filtered_counts(grp, categories_to_check, 'Total Disciplined', mode='sum')) * 100
+            #         category_disciplined_percentage = category_disciplined_percentage.reset_index(name='percentage_cat')
+            #         category_disciplined_percentage['sample'] = 'Disciplined'
 
-                    # get percentage of category students in population
-                    category_students_percentage = df_year_filtered.groupby(group_key).apply(lambda grp: get_filtered_counts(grp, categories_to_check, 'Total Eligible')) / df_year_non_filtered.groupby(group_key).apply(lambda grp: get_filtered_counts(grp, categories_to_check, 'Total Eligible', mode='sum')) * 100
-                    category_students_percentage = category_students_percentage.reset_index(name='percentage_cat')
-                    category_students_percentage['sample'] = 'Population'
+            #         # get percentage of category students in population
+            #         category_students_percentage = df_year_filtered.groupby(group_key).apply(lambda grp: get_filtered_counts(grp, categories_to_check, 'Total Eligible')) / df_year_non_filtered.groupby(group_key).apply(lambda grp: get_filtered_counts(grp, categories_to_check, 'Total Eligible', mode='sum')) * 100
+            #         category_students_percentage = category_students_percentage.reset_index(name='percentage_cat')
+            #         category_students_percentage['sample'] = 'Population'
 
-                    # concatenate the two dataframes
-                    concat_df = pd.concat([category_disciplined_percentage, category_students_percentage], axis=0)
+            #         # concatenate the two dataframes
+            #         concat_df = pd.concat([category_disciplined_percentage, category_students_percentage], axis=0)
 
-                    bar = alt.Chart(concat_df).mark_bar().encode(
-                    color=alt.Color(
-                            'Race/Ethnicity:N',
-                        scale=alt.Scale(
-                            range = mapped_colors,
-                            domain = races
-                       )
-                    ),
-                    x='Race/Ethnicity',
-                    y='percentage_cat',
-                    column='sample:N'
-                ).properties(
-                    width=alt.Step(40)  # controls width of bar.
-                )
+            #         bar = alt.Chart(concat_df).mark_bar().encode(
+            #         color=alt.Color(
+            #                 'Race/Ethnicity:N',
+            #             scale=alt.Scale(
+            #                 range = mapped_colors,
+            #                 domain = races
+            #            )
+            #         ),
+            #         x='Race/Ethnicity',
+            #         y='percentage_cat',
+            #         column='sample:N'
+            #     ).properties(
+            #         width=alt.Step(40)  # controls width of bar.
+            #     )
 
-                    st.write(bar)
+            #         st.write(bar)
 
 
 
