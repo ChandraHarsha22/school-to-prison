@@ -82,6 +82,14 @@ if not st.session_state.show_visuals:
 if st.session_state.show_visuals:
     st.button("Click here to go back", on_click=on_click)
     st.header("Overview of disproportionality in discipline")
+    st.write("""
+This section presents a critical examination of the disciplinary rates across different racial groups, casting light on the nuances of disproportionality in school discipline. Our analysis delves into the average discipline rates within each district, identifying instances where certain groups face disciplinary actions at rates higher than the district average — a clear indicator of disproportionality.
+
+We go further to dissect how these rates vary within each disadvantaged group. This includes students with disabilities, English learners, and those from low-income backgrounds. By doing so, we not only unveil the overarching trends of disciplinary measures but also spotlight the disparities that exist within these subgroups.
+
+Our approach demystifies the complex dynamics of school discipline, presenting the data in an accessible format that speaks to both academic professionals and the general public. This analysis is instrumental in fostering an understanding of how disciplinary practices in schools may disproportionately affect certain racial groups. It serves as a stepping stone towards advocating for more equitable educational policies and practices, ensuring that discipline in schools is fair, unbiased, and conducive to the learning and growth of all students.
+""")
+
     main_container.empty()
     districts = df['District Name'].unique()
     district = st.sidebar.selectbox('Select a district', districts)
@@ -144,6 +152,13 @@ if st.session_state.show_visuals:
             st.write(chart)
 
             st.header("Race breakdown for " + cat_val + " students in " + district + " district")
+            st.write("""
+Building on our exploration of disproportionality in school discipline, we now turn our attention to a detailed race breakdown among all students in the State Totals District. This analysis crucially highlights the representation of each racial group within the student body, juxtaposing it against the proportion of students from these groups who face disciplinary actions.
+
+In our visual representation, red bars in the bar chart symbolize the percentage of students disciplined within each racial category. This vivid color choice is deliberate, underscoring the critical insights these figures reveal. The contrast between the overall racial composition in the student body and the corresponding disciplinary percentages offers a stark visualization of how disciplinary measures are distributed across different racial groups.
+
+This analysis is not just a collection of numbers; it is a narrative about equity and representation in our education system. By clearly illustrating these disparities, we aim to foster a deeper understanding of the challenges faced by various racial groups in the educational landscape. It's an essential step towards advocating for policies that ensure a balanced and fair approach to discipline, aligning disciplinary practices with the principles of equity and inclusion.
+""")
 
             race_disciplined_counts = df_filtered.groupby(['Race/Ethnicity', 'year']).apply(lambda grp: get_filtered_counts(grp, categories_to_check, 'Total Disciplined')).reset_index(name='disciplined_counts')
 

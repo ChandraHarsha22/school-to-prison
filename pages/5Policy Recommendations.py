@@ -19,7 +19,7 @@ In our ongoing pursuit of educational excellence and equity, it is imperative to
 
 5. **Address the disproportionate discipline of students with disabilities**: Promoting inclusive educational settings can lead to a reduction in disciplinary disparities, aligning with federal mandates like the IDEA (Kurth, Lyon, & Shogren, 2015; Douglas, 2021).
 
-By adapting these best practices, the Lowell school district can effectively address its current challenges, ensuring a positive and inclusive disciplinary climate in schools.
+By adapting these best practices, the Massachusetts school district can effectively address its current challenges, ensuring a positive and inclusive disciplinary climate in schools.
 
 ### References
 #### Bibliography
